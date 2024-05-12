@@ -2,8 +2,14 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    background-image: url('img/5_background/background_game.png');
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 canvas {
     background-color: black;
+    border-style: ridge;
+    border-width: 10px;
+    border-color: brown;
 }

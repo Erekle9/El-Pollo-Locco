@@ -9,8 +9,9 @@ class World {
     healthStatus = new StatusBarHealth();
     bottleStatus = new StatusBarBottle();
     coinStatus = new StatusbarCoin();
-    
     throwableObjects = [];
+    bottleAmount = 0;
+    coinAmount = 0;
 
     constructor (canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
@@ -27,7 +28,7 @@ class World {
 
     run() {
         setInterval(() => {
-            this.checkCollisions();
+            this.checkCollisionsWithEnemy();
             this.checkThrowObjects();
         }, 200);
     }
@@ -39,7 +40,7 @@ class World {
         }
     }
 
-    checkCollisions() {
+    checkCollisionsWithEnemy() {
         this.level.enemies.forEach((enemy) => {
             if (this.character.isColliding(enemy)) {
                 this.character.hit();
@@ -48,11 +49,20 @@ class World {
         });
     }
 
+    checkCollisionWithObject() {
+        this.level.CollectableObjects.forEach((object, index) => {
+
+        });
+    }
+
+    collectingBottle(CollectableObjects) {
+        return CollectableObjects instanceof CollectableBottle;
+    }
+
+
     draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
         this.ctx.translate(this.camera_x, 0);
-
         this.addObjectsToMap(this.level.backgroundObjects);
 
         this.ctx.translate(-this.camera_x, 0); // back
@@ -60,6 +70,8 @@ class World {
         this.addToMap(this.bottleStatus);
         this.addToMap(this.coinStatus);
         this.ctx.translate(this.camera_x, 0); // forwards
+        
+        this.addObjectsToMap(this.level.items);
 
         this.addToMap(this.character);
         this.addObjectsToMap(this.level.clouds);

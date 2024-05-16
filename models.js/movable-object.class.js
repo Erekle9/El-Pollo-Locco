@@ -5,6 +5,8 @@ class MovableObject extends DrawableObject {
     acceleration = 2.5;
     energy = 100;
     lastHit = 0;
+    bottleAmount = 0;
+    coinAmount = 0;
 
 
     applygravity() {
@@ -46,6 +48,10 @@ class MovableObject extends DrawableObject {
         let timepassed = new Date().getTime() - this.lastHit; // Difference in ms
         timepassed = timepassed / 1000; // Difference in sec
         return timepassed < 0.5;
+    }
+
+    collect() {
+
     }
 
     isDead() {

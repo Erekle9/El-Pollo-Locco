@@ -8,6 +8,12 @@ class CollectableBottle extends CollectableObjects {
     ];
     
 
+    offset = {
+        top: -15,
+        left: 15,
+        bottom: -15,
+        right: 15,
+      };
 
     constructor() {
         super().loadImage(this.BOTTLE_LEFT);
@@ -16,7 +22,7 @@ class CollectableBottle extends CollectableObjects {
         this.x = 500 + Math.random() * 2000;
         this.y = 370;
         this.height = 70;
-        this.width = 30;
+        this.width = 70;
       }
 
 }

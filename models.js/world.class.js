@@ -35,6 +35,7 @@ class World {
     checkThrowObjects() {
         if (this.keyboard.D) {
             let bottle = new ThrowableObject(this.character.x +100, this.character.y + 100);
+            bottle.throw(this.character.otherDirection);
             this.throwableObjects.push(bottle);
         }
     }
@@ -51,9 +52,7 @@ class World {
     checkCollisionWithObject() {
         this.level.items.forEach((item, index) => {
             if (this.character.isColliding(item)) {
-                console.log('collect');
                 this.character.bottleAmount ++ ;
-                console.log(this.bottleStatus.percentageBottle);
                 this.bottleStatus.setPercentageBottles(this.character.bottleAmount);
                 this.removeCollectedObject(index);
             }
@@ -64,6 +63,7 @@ class World {
 
     removeCollectedObject(index) {
         this.level.items.splice(index, 1);
+        takeBottleSound();
       }
 
 

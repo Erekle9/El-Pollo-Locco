@@ -14,8 +14,15 @@ class DrawableObject {
         this.img.src = path;
     }
 
+    
+
     draw(ctx) {
-        ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
+        try {
+            ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
+        } catch(e) {
+            console.log('could not load image,', this.img);
+        }
+        
     }
 
     drawFrame(ctx) {

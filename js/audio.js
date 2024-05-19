@@ -5,9 +5,9 @@ let audioData = [
     new Audio('audio/chicken-is-dead.mp3'),
     new Audio('audio/collect-bottle.mp3'),
     new Audio('audio/jump.mp3'),
-    new Audio('audio/throwing_bottle.mp3'),
+    new Audio('audio/splashing_bottle.mp3'),
     new Audio('audio/walking.mp3'),
-    new Audio('audio/throw.mp3'),
+    new Audio('audio/throwing_bottle.mp3'),
     new Audio('audio/win.mp3'),
     
 
@@ -25,7 +25,7 @@ function jumpSound() {
     audioData[2].play();
 }
 
-function throwingBottleSound() {
+function splashingBottleSound() {
     audioData[3].play(); 
 }
 
@@ -37,7 +37,7 @@ function pauseWalkingSound() {
     audioData[4].pause();
 }
 
-function throwSound() {
+function throwingBottleSound() {
     audioData[5].play();
 }
 

@@ -7,9 +7,19 @@ class MovableObject extends DrawableObject {
     lastHit = 0;
     bottleAmount = 0;
     coinAmount = 0;
+    ground = 180;
+    
+
+    offset = {
+        top: 0,
+        left: 0,
+        bottom: 0,
+        right: 0,
+      };
 
 
-    applygravity() {
+
+    applyGravity() {
         setInterval(() => {
             if (this.isAboveGround() || this.speedY > 0) {
                 this.y -= this.speedY;
@@ -18,6 +28,10 @@ class MovableObject extends DrawableObject {
             
         }, 1000 / 25);
     }
+
+
+    
+
 
     isAboveGround() {
         if (this instanceof ThrowableObject) {
@@ -28,12 +42,21 @@ class MovableObject extends DrawableObject {
     }
 
     // character.isColliding(chicken);
+    // isColliding(mo) {
+    //     return this.x + this.width > mo.x && 
+    //            this.y + this.height > mo.y &&
+    //            this.x < mo.x &&
+    //            this.y < mo.y + mo.height; 
+    // }
+
     isColliding(mo) {
-        return this.x + this.width > mo.x && 
-               this.y + this.height > mo.y &&
-               this.x < mo.x &&
-               this.y < mo.y + mo.height; 
-    }
+        return (
+          this.x + this.width - this.offset.right > mo.x + mo.offset.left &&
+          this.y + this.height - this.offset.bottom > mo.y + mo.offset.top &&
+          this.x + this.offset.left < mo.x + mo.width - mo.offset.right &&
+          this.y + this.offset.top < mo.y + mo.height - mo.offset.bottom
+        );
+      }
 
     hit() {
         this.energy -= 5;
@@ -45,9 +68,9 @@ class MovableObject extends DrawableObject {
     }
 
     isHurt() {
-        let timepassed = new Date().getTime() - this.lastHit; // Difference in ms
-        timepassed = timepassed / 1000; // Difference in sec
-        return timepassed < 0.5;
+        let timePassed = new Date().getTime() - this.lastHit; // Difference in ms
+        timePassed = timePassed / 1000; // Difference in sec
+        return timePassed < 0.5;
     }
 
     collect() {

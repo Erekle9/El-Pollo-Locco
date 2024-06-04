@@ -20,7 +20,7 @@ class DrawableObject {
         try {
             ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
         } catch(e) {
-            console.log('could not load image,', this.img);
+            console.error('could not load image,', this.img);
         }
         
     }
@@ -34,6 +34,8 @@ class DrawableObject {
             ctx.stroke();
         }
     }
+
+    
 
     loadImages(arr) {
         arr.forEach((path) => {

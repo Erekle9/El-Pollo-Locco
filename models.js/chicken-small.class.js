@@ -3,6 +3,7 @@ class SmallChicken extends MovableObject {
     y = 390;
     height = 60;
     width = 70;
+    chickenIsDead = false;
 
     offset = {
         top: -30,
@@ -19,22 +20,43 @@ class SmallChicken extends MovableObject {
 
     IMAGE_DEAD = 'img/3_enemies_chicken/chicken_small/2_dead/dead.png';
 
+     /**
+   * Constructs a new ChickenSmall object.
+   */
     constructor() {
         super().loadImage('img/3_enemies_chicken/chicken_small/1_walk/1_w.png');
         this.loadImages(this.IMAGES_WALKING);
         this.x = 500 + Math.random() * 600;
-        this.speed = 0.15 + Math.random() * 0.25;
+        this.speed = 1 + Math.random() * 2;
         this.animate();
     }
 
+    /**
+   * Initiates various animations for the chicken.
+   */
     animate() {
-        setInterval(() => {
-            this.moveLeft();
-        }, 1000 / 60);
-
-        setInterval(() => {
-            this.playAnimation(this.IMAGES_WALKING);
-        }, 300)
+        this.moveLeftInterval = setInterval(() => this.moveLeft(), 1000 / 60);
+        this.walkAnimationInterval = setInterval(() => this.playAnimation(this.IMAGES_WALKING),300);
     }
+
+    /**
+   * Animates the dead chicken.
+   * & Plays the sound for defeated chicken.
+   */
+  deadChickenAnimation() {
+    if (this.chickenIsDead) {
+      this.loadImage(this.IMAGE_DEAD);
+      this.removeDeadChickenInterval();
+      smallChickenIsDeadSound();
+    }
+  }
+
+  /**
+   * Removes intervals associated with dead chicken animation.
+   */
+  removeDeadChickenInterval() {
+    clearInterval(this.moveLeftInterval);
+    clearInterval(this.walkAnimationInterval);
+  }
 
 }

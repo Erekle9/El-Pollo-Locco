@@ -47,7 +47,6 @@ class Chicken extends MovableObject {
       this.loadImage(this.IMAGE_DEAD);
       this.removeDeadChickenInterval();
       chickenIsDeadSound();
-      console.log(this.chickenIsDead);
     }
   }
 

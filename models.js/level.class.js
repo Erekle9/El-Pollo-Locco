@@ -3,7 +3,8 @@ class Level {
     endBoss;
     clouds;
     backgroundObjects;
-    items;
+    bottles;
+    coins;
     level_end_x = 4200;
 
     /**
@@ -14,12 +15,13 @@ class Level {
    * @param {Array} collectableObjects - An Array of collectableObjects (containing bottles and coins) in the level
    * @param {Array} backgroundObjects - An array of background objects in the level
    */
-    constructor(enemies, endBoss, clouds, backgroundObjects, items) {
+    constructor(enemies, endBoss, clouds, backgroundObjects, bottles, coins) {
         this.enemies = enemies;
         this.endBoss = endBoss;
         this.clouds = clouds;
         this.backgroundObjects = backgroundObjects;
-        this.items = items;
+        this.bottles = bottles;
+        this.coins = coins;
     }
 
 }

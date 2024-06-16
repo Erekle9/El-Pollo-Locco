@@ -1,7 +1,7 @@
 let level1;
 
 function initLevel() {
-  level1 = new Level(createEnemies(), createEndBoss(), createClouds(), createBackgroundObjects(), createItems());
+  level1 = new Level(createEnemies(), createEndBoss(), createClouds(), createBackgroundObjects(), createBottles(), createCoins());
 }
 
 /**
@@ -93,13 +93,19 @@ function createBackgroundObjects() {
    * Creates collectable objects for the level.
    * @returns {Array} An array of collectable object instances.
    */
-function createItems() {
+function createBottles() {
   return [
     new CollectableBottle(),
     new CollectableBottle(),
     new CollectableBottle(),
     new CollectableBottle(),
     new CollectableBottle(),
+    
+  ];
+}
+
+function createCoins() {
+  return [
     new Coin(),
     new Coin(),
     new Coin(),
@@ -112,5 +118,4 @@ function createItems() {
     new Coin()
   ];
 }
-
 

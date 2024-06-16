@@ -1,5 +1,6 @@
 class World {
   character = new Character();
+  endBoss = new EndBoss();
   level = level1;
   canvas;
   ctx;
@@ -9,6 +10,7 @@ class World {
   healthStatus = new StatusBarHealth();
   bottleStatus = new StatusBarBottle();
   coinStatus = new StatusbarCoin();
+  endBossHealthStatus = new StatusBarEndBoss();
   throwableObjects = [];
   bottleAmount = 0;
   coinAmount = 0;
@@ -40,10 +42,13 @@ class World {
     setInterval(() => {
       this.checkEnemyCollisions();
       this.checkCollisionWithObject();
+      this.checkCollisionWithCoins();
       this.checkThrowObjects();
       this.checkThrowCollisions();
-      this.jumpOnChicken();
     }, 200);
+    setInterval(() => {
+      this.jumpOnChicken();
+    }, 10);
   }
 
   /**
@@ -142,7 +147,7 @@ class World {
   bottleHittingEndBoss(endBoss, ThrowableObject, allowNewBottleThrow) {
     ThrowableObject.splashingBottle();
     this.removeThrownBottle(ThrowableObject);
-    endBoss.endBossIsHit(allowNewBottleThrow);
+    endBoss.endBossIsHit();
     ThrowableObject.speedY = 0;
     ThrowableObject.speedX = 0;
     setTimeout(() => (this.allowNewBottleThrow = true), 1000);
@@ -160,30 +165,47 @@ class World {
   }
 
   /**
-   * Checks for the collection of items by the character.
+   * Checks for the collection of bottles by the character.
    */
   checkCollisionWithObject() {
-    this.level.items.forEach((item, index) => {
-      if (this.character.isColliding(item)) {
+    this.level.bottles.forEach((bottles, index) => {
+      if (this.character.isColliding(bottles)) {
         this.character.bottleAmount++;
         this.bottleStatus.setPercentageBottles(this.character.bottleAmount);
-        this.removeCollectedObject(index);
-      }
-      if (this.character.isColliding(item)) {
-        this.character.coinAmount++;
-        this.coinStatus.setPercentageCoins(this.character.coinAmount);
         this.removeCollectedObject(index);
       }
     });
   }
 
+   /**
+   * Checks for the collection of coins by the character.
+   */
+  checkCollisionWithCoins() {
+      this.level.coins.forEach((coins, index) => {
+        if (this.character.isColliding(coins)) {
+          this.character.coinAmount++;
+          this.coinStatus.setPercentageCoins(this.character.coinAmount);
+          this.removeCollectedCoins(index);
+        }
+      });
+  }
+
   /**
-   * Removes the collected object from the level.
+   * Removes the collected bottle from the level.
    * @param {number} index - The index of the collected object.
    */
   removeCollectedObject(index) {
-    this.level.items.splice(index, 1);
+    this.level.bottles.splice(index, 1);
     takeBottleSound();
+  }
+
+  /**
+   * Removes the collected coin from the level.
+   * @param {number} index - The index of the collected object.
+   */
+  removeCollectedCoins(index) {
+    this.level.coins.splice(index, 1);
+    takeCoinSound();
   }
 
   /**
@@ -191,8 +213,7 @@ class World {
    */
   checkEnemyCollisions() {
     this.level.enemies.forEach((enemy) => {
-      if (this.characterCollidingWithEnemy(enemy))
-        this.checkCollisionsWithEnemy();
+      if (this.characterCollidingWithEnemy(enemy)) this.checkCollisionsWithEnemy();
     });
     this.level.endBoss.forEach((endBoss) => {
       if (this.characterCollidingWithEndBoss(endBoss)) this.checkCollisionsWithEnemy();
@@ -214,13 +235,19 @@ class World {
    * Handles character collision with enemy.
    */
   checkCollisionsWithEnemy() {  // characterCollidedWithEnemy()
-    this.level.enemies.forEach((enemy) => {
-      if (this.character.isColliding(enemy) && this.character.isWalking()) {
-        this.character.hit();
-        this.healthStatus.setPercentage(this.character.energy);
-      }
-    });
+    this.character.hit();
+    this.healthStatus.setPercentage(this.character.energy);
   }
+
+  // checkCollisionsWithEnemy() {  // characterCollidedWithEnemy()
+  //   this.level.enemies.forEach((enemy) => {
+  //     if (this.character.isColliding(enemy) && this.character.isWalking()) {
+  //       this.character.hit();
+  //       this.healthStatus.setPercentage(this.character.energy);
+  //     }
+  //   });
+    
+  // }
 
   /**
    * Handles character collision with endBoss.
@@ -254,7 +281,7 @@ class World {
    */
   characterJumpedOnChicken(enemy) {
     this.killChicken(enemy);
-    setTimeout(() => this.character.jump(), 100);
+    this.character.jump();
     this.removeDeadChicken(enemy);
   }
 
@@ -331,6 +358,12 @@ class World {
     this.addToMap(this.healthStatus);
     this.addToMap(this.bottleStatus);
     this.addToMap(this.coinStatus);
+    this.addToMap(this.endBossHealthStatus);
+
+    // if (this.endBossHealthStatus.visible) {
+    //   this.addToMap(this.endBossHealthStatus);
+    // }
+    
   }
 
   /**
@@ -341,7 +374,8 @@ class World {
     this.addObjectsToMap(this.level.enemies);
     this.addObjectsToMap(this.level.endBoss);
     this.addObjectsToMap(this.level.clouds);
-    this.addObjectsToMap(this.level.items);
+    this.addObjectsToMap(this.level.bottles);
+    this.addObjectsToMap(this.level.coins);
   }
 
   /**

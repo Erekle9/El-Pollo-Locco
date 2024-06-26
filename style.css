@@ -16,3 +16,19 @@ canvas {
     border-width: 10px;
     border-color: brown;
 }
+
+#control-button {
+    background-image: url('img/buttons/controller.svg');
+}
+
+#top-start-button {
+    background-image: url('img/buttons/play-button.svg');
+}
+
+#mute-button {
+    background-image: url('');
+}
+
+#fullscreen-button {
+    background-image: url('img/buttons/fullscreen.svg');
+}

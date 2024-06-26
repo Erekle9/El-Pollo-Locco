@@ -7,6 +7,7 @@ class World {
   keyboard;
   camera_x = 0;
   allowNewBottleThrow = true;
+  endBossIsHurt = false;
   healthStatus = new StatusBarHealth();
   bottleStatus = new StatusBarBottle();
   coinStatus = new StatusbarCoin();
@@ -125,7 +126,7 @@ class World {
     enemy.deadChickenAnimation();
     this.killChicken(enemy);
     this.removeDeadChicken(enemy);
-    this.allowNewBottleThrow = true;
+    allowNewBottleThrow = true;
   }
 
   /**
@@ -150,7 +151,9 @@ class World {
     endBoss.endBossIsHit();
     ThrowableObject.speedY = 0;
     ThrowableObject.speedX = 0;
-    setTimeout(() => (this.allowNewBottleThrow = true), 1000);
+    this.endBossIsHurt = true;
+    console.log("endBossIsHitted", this.bottleHitEndBoss(endBoss, ThrowableObject));
+    // setTimeout(() => (allowNewBottleThrow = true), 1000);
   }
 
   /**

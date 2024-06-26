@@ -4,9 +4,7 @@ class EndBoss extends MovableObject {
   y = 55;
   world;
   energy = 100;
-  endBossIsHurt = false;
   endBossIsDead = false;
-  hadFirstContact = false;
   offset = {
     top: 0,
     left: 0,
@@ -70,53 +68,45 @@ class EndBoss extends MovableObject {
   }
 
   animate() {
-    setInterval(() => {
-    this.endBossAlertInterval();
+    setInterval(() => this.playEndBoss(), 300);
 
-      // if (this.alertArea) {
-      //   this.alertAnimation();
-      // } else if (this.hadFirstContact()) {
-      //   this.moveAnimateEndBoss();
-      //   EndBosAreaSound();
-      // }
-      //  if (world.character.x > 3900) {
-      //   clearInterval(this.alertAnimation())
-      //   this.moveAnimateEndBoss();
-      //   EndBosAreaSound();
-      // }
+    // setInterval(() => {
+
+    //   if (this.alertArea) {
+    //     this.alertAnimation();
+    //   } else if (this.hadFirstContact()) {
+    //     this.moveAnimateEndBoss();
+    //     EndBosAreaSound();
+    //   }
+    //    if (world.character.x > 3900) {
+    //     clearInterval(this.alertAnimation())
+    //     this.moveAnimateEndBoss();
+    //     EndBosAreaSound();
+    //   }
       
-    }, 150);
+    // }, 150);
   }
 
   alertAnimation() {
     this.playAnimation(this.IMAGES_ALERT);
   }
 
-  endBossAlertInterval() {
-    if (this.alertArea()) this.playAnimation(this.IMAGES_ALERT);
-    else if (this.firstContact()) this.doneFirstContact();
-  }
-
   alertArea() {
     return world.character.x > 3850;
   }
 
-  firstContact() {
-    return world.character.x < 3850;
-  }
-
-  doneFirstContact() {
-    this.hadFirstContact = true;
-  }
-
   moveAnimateEndBoss() {
-    this.moveLeftInterval = setInterval(() => this.moveLeft(), 1000 / 60);
-    this.walkAnimationInterval = setInterval(() => this.playAnimation(this.IMAGES_WALKING), 300);
+    setInterval(() => this.moveLeft(), 1000 / 60);
+    setInterval(() => this.playAnimation(this.IMAGES_WALKING), 300);
   }
 
   endBossHartAnimation() {
     this.playAnimation(this.IMAGES_HURT);
-    // this.hurtAnimationInterval = setInterval(() => this.playAnimation(this.IMAGES_HURT),300);
+   setInterval(() => this.playAnimation(this.IMAGES_HURT),300);
+  }
+
+  endBossAttackAnimation() {
+    this.playAnimation(this.IMAGES_ATTACK);
   }
 
   /**
@@ -124,26 +114,41 @@ class EndBoss extends MovableObject {
    */
   endBossIsHit() {
     this.energy -= 8;
-    this.endBossIsHurt = true;
+    // this.endBossIsHurt = true;
     setTimeout(() => (this.endBossIsHurt = false), 50);
-    if (this.energy < 0) {
+    if (this.energy <= 0) {
       this.energy = 0;
-      console.log('');
     } else {
       this.lastHit = new Date().getTime();
       this.endBossHartAnimation();
     }
-    
-    
-    // if (this.energy <= 0) {
-    //   this.energy = 0;
-    //   this.endBossDead = true;
-    //   this.endBossIsKilled();
-    // }
     // this.setStatusBarEndBoss();
+    console.log( "bosis healt is:", this.energy);
   }
 
+  endBossDeadAnimation() {
+    this.playAnimation(this.IMAGES_DEAD);
+  }
 
+  playEndBoss() {
+    if (this.isDead) {
+      if (this.isDead()) {
+        this.playAnimation(this.IMAGES_DEAD);
+        console.log('is dead');
+        return;
+      } else if (this.endBossIsHurt = true) {
+        this.playAnimation(this.IMAGES_HURT);
+        this.moveLeft();
+      } else if (this.alertArea) {
+        this.alertAnimation();
+      } else {
+        if (this.energy <= 50) {
+          this.playAnimation(this.IMAGES_ATTACK);
+          this.speed = 0.25;
+        }
+      }
+    }
+    }
   
 
 }

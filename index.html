@@ -30,8 +30,22 @@
 </head>
 <body onload="init()">
     <h1>El pollo Locco</h1>
-    <canvas id="canvas" width="720" height="480">
+    <section id="game-container">
+        <div class="top-buttons">
+            <div class="top-left-button" id="top-left-button">
+                <button id="control-button"></button>
+            </div>
+            <div class="top-right-buttons" id="top-right-buttons">
+                <button id="mute-button"></button>
+                <button id="fullscreen-button"></button>
+            </div>
+        </div>
+        <div class="top-start-button" id="top-start-button">
+            <button id="play-button"></button>
+        </div>
+        <canvas id="canvas" width="720" height="480">
 
-    </canvas>
+        </canvas>
+    </section>
 </body>
 </html>

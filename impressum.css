@@ -1,0 +1,86 @@
+@font-face {
+    font-family: 'roboto';
+    src: url('./fonts/Roboto-Light-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'roboto';
+    src: url('./fonts/Roboto-Regular-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+/* Set the background color for the body */
+body {
+    background-color: #FFD60C;
+    font-family: Arial, sans-serif; /* Optional: Set a default font for better readability */
+    margin: 0; /* Remove default margin */
+    padding: 0; /* Remove default padding */
+    font-family: 'roboto';
+}
+
+/* Style the div container */
+.impressum {
+    background-color: white; /* Set background color to white */
+    border-radius: 8px; /* Optional: Add rounded corners */
+    padding: 20px; /* Add padding inside the container */
+    margin: 20px auto; /* Center the container with auto margins */
+    max-width: 800px; /* Optional: Set a maximum width for better readability */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional: Add a subtle shadow */
+}
+
+/* Style the links */
+a {
+    color: #007BFF; /* Optional: Set link color */
+    text-decoration: none; /* Optional: Remove underline */
+}
+
+a:hover {
+    text-decoration: underline; /* Optional: Underline links on hover */
+}
+
+/* Optional: Style the headings and paragraphs */
+h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+p {
+    line-height: 1.6; /* Improve readability with line height */
+    margin-bottom: 10px; /* Space between paragraphs */
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .impressum {
+        padding: 15px;
+        margin: 10px;
+    }
+
+    h1 {
+        font-size: 20px;
+    }
+
+    p {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .impressum {
+        padding: 10px;
+        margin: 5px;
+    }
+
+    h1 {
+        font-size: 18px;
+    }
+
+    p {
+        font-size: 12px;
+    }
+}

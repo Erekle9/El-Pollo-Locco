@@ -1,34 +1,302 @@
+@font-face {
+    font-family: 'JungleFever';
+    src: url('./fonts/JungleFever-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
 body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    flex-direction: column;
     min-height: 100vh;
     margin: 0;
     background-image: url('img/5_background/background_game.png');
     background-repeat: no-repeat;
     background-size: cover;
+    font-family: 'JungleFever';
 }
 
-canvas {
+#game-title {
+    color: #FFB300;
+    font-size: 56px;
+}
+
+#canvas {
     background-color: black;
-    border-style: ridge;
-    border-width: 10px;
-    border-color: brown;
 }
 
-#control-button {
-    background-image: url('img/buttons/controller.svg');
+#game-screen {
+    position: relative;
+    height: 480px;
+    width: 720px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-#top-start-button {
-    background-image: url('img/buttons/play-button.svg');
+.game-screen-mobile {
+    width: 100vw !important;
+    height: 100vh !important;
 }
 
-#mute-button {
-    background-image: url('');
+.canvas-mobile {
+    width: 100% !important;
+    height: 100% !important;
 }
 
-#fullscreen-button {
-    background-image: url('img/buttons/fullscreen.svg');
+#game-over-screen, #initial-screen {
+    display: none; /* Hide by default */
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 999;
+    flex-direction: column;
+    justify-content: center; /* Align content to the center */
+    align-items: center;
+    color: white;
+}
+
+#game-over-screen.win {
+    background-image: url("/img/9_intro_outro_screens/game_over/game\ over!.png");
+    background-size: cover;
+    background-position: center;
+}
+
+#game-over-screen.lose {
+    background-image: url("/img/9_intro_outro_screens/game_over/you\ lost.png");
+    background-size: cover;
+    background-position: center;
+}
+
+#initial-screen {
+    display: flex;
+    background-image: url("/img/9_intro_outro_screens/start/startscreen_1.png");
+    background-size: contain;
+}
+
+.initial-screen-mobile {
+    background-size: cover !important;
+    background-position: center !important;
+}
+
+#game-over-message {
+    font-size: 48px;
+    margin-bottom: 20px; /* Add some space at the bottom */
+    text-align: center;
+}
+
+.restart-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+    bottom: 10px;
+}
+
+.restart-button {
+    width: 100px;
+    height: 100px;
+}
+
+.restart-button:hover {
+    width: 130px;
+    height: 130px;
+    transition-duration: 200ms;
+    cursor: pointer;
+}
+
+#game-instructions {
+    height: 100px;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.7); /* Semi-transparent background */
+    align-items: center;
+    justify-content: space-around;
+    display: flex;
+    position: absolute;
+    bottom: 0;
+}
+
+.instruction-item-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.instruction-item-container > span {
+    color: black;
+    font-weight: bold;
+}
+
+.instruction-button {
+    height: 64px;
+    width: auto;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 18px;
+    background-color: #444;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #666;
+}
+
+.play-button {
+    width: 150px;
+    height: 150px;
+}
+
+.play-button:hover {
+    width: 200px;
+    height: 200px;
+    transition-duration: 200ms;
+    cursor: pointer;
+}
+
+#mobile-controls {
+    display: none; /* Hide by default */
+    position: absolute;
+    bottom: 20px;
+    width: 90%;
+    justify-content: space-between;
+}
+
+.mobile-controls-left-container,
+.mobile-buttons-right-container {
+    width: 120px;
+    display: flex;
+    justify-content: space-between;
+}
+
+#rotate-device-overlay {
+    display: none; /* Hide by default */
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.8); /* Dark semi-transparent background */
+    color: white;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    z-index: 1000;
+}
+
+
+#left-button {
+    width: 50px;
+    height: 50px;
+    background-color: #ffff;
+    background-image: url('./img/buttons/left.png');
+    background-size: contain;
+    border-radius: 8px;
+    color: #444;
+}
+#right-button {
+    width: 50px;
+    height: 50px;
+    background-color: #ffff;
+    background-image: url('./img/buttons/right.png');
+    background-size: contain;
+    border-radius: 8px;
+}
+
+#jump-button{
+    width: 50px;
+    height: 50px;
+    background-color: #ffff;
+    background-image: url('./img/buttons/right.png');
+    transform: rotate(-90deg);
+    background-size: cover;
+    border-radius: 8px;
+}
+
+#attack-button {
+    width: 50px;
+    height: 50px;
+    background-color: #ffff;
+    background-image: url('./img/6_salsa_bottle/salsa_bottle.png');
+    background-size: cover;
+    background-position: center;
+    border-radius: 8px;
+}
+
+#user-controls{
+    position: absolute;
+    top: 5px;
+}
+
+#mute-button{
+    background-repeat: no-repeat ;
+    background-position: center;
+    background-size: contain;
+    background-color: #ffff;
+    width: 24px;
+    height: 30px;
+}
+
+#mute-button.muted {
+    background-image: url('./img/buttons/sound-max.svg');
+    
+}
+
+#mute-button.unmuted{
+    background-image: url('./img/buttons/sound-mute.svg');
+}
+
+#full-screen-button{
+    background-image: url('./img/buttons/fullscreen.svg');
+    background-repeat: no-repeat ;
+    background-position: center;
+    background-size: contain;
+    background-color: #ffff;
+    width: 24px;
+    height: 30px;
+}
+
+#notes-button {
+    background-image: url('./img/buttons/notes.svg');
+    background-repeat: no-repeat ;
+    background-position: center;
+    background-size: contain;
+    background-color: #ffff;
+    width: 24px;
+    height: 30px;
+}
+
+
+#game-credits {
+    text-align: center;
+    position: absolute;
+    top: 0px;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: flex-end;
+}
+
+#game-credits a {
+    text-decoration: none; /* Remove underline */
+    color: #FFD60C; /* Inherit color from parent */
+    outline: none; /* Remove default outline */
+}
+
+#game-credits a h2 {
+    margin: 10px 20px;
+    padding: 10px;
+    transition: color 0.3s, background-color 0.3s;
+}
+
+#game-credits a h2:hover {
+    color: white; /* Change text color on hover */
+    background-color: #FFB300; /* Change background color on hover */
+    border-radius: 5px; /* Optional: Add border-radius for rounded corners */
 }

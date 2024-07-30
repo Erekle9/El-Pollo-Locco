@@ -1,20 +1,20 @@
 class World {
   character = new Character();
-  endBoss = new EndBoss();
+  characterIsDead = false;
   level = level1;
+  endBoss = level1.endBoss;
   canvas;
   ctx;
   keyboard;
   camera_x = 0;
   allowNewBottleThrow = true;
-  endBossIsHurt = false;
   healthStatus = new StatusBarHealth();
   bottleStatus = new StatusBarBottle();
   coinStatus = new StatusbarCoin();
-  endBossHealthStatus = new StatusBarEndBoss();
   throwableObjects = [];
   bottleAmount = 0;
   coinAmount = 0;
+  hasWonTheGame = false;
 
   /**
    * Class representing the game world.
@@ -34,35 +34,102 @@ class World {
    */
   setWorld() {
     this.character.world = this;
+    this.endBoss.forEach(boss => boss.world = this);
   }
 
   /**
    * Starts the game loop.
    */
   run() {
-    setInterval(() => {
+    this.gameInterval = setInterval(() => {
       this.checkEnemyCollisions();
       this.checkCollisionWithObject();
       this.checkCollisionWithCoins();
       this.checkThrowObjects();
       this.checkThrowCollisions();
-    }, 200);
-    setInterval(() => {
+      this.checkGameOver()
+    }, 150);
+    this.jumpInterval = setInterval(() => {
       this.jumpOnChicken();
+    
     }, 10);
+    this.endBoss.forEach(boss => boss.animate());
+    playBackgroundSound()
+  }
+
+  /**
+   * Asynchronous function 'wait' that returns a Promise resolving after a specified number of milliseconds ('ms') using setTimeout
+   */
+  async wait(ms) {
+    return new Promise(resolve => {
+      setTimeout(resolve, ms);
+    });
+  }
+
+  /**
+   * Asynchronous function 'checkGameOver' that checks if the game is over based on character energy or end boss status, waits 300ms, and then ends the game or sets the win status accordingly
+   */
+  async checkGameOver(){
+
+    if(this.character.energy <= 0){
+      await this.wait(300)
+      this.endGame();
+    } else if (this.endBoss.every((boss) => boss.isDead)){
+      await this.wait(300)
+      this.hasWonTheGame = true;
+      
+      this.endGame();
+    }
+  }
+
+/**
+   * Function 'endGame' that clears all intervals related to the end boss, character, and game, sets gameOver to true, and displays the game over screen
+   */
+  endGame() {
+    clearInterval(this.endBoss.forEach(boss => boss.endBossStateInterval));
+    clearInterval(this.endBoss.forEach(boss => boss.walkInterval));
+    clearInterval(this.endBoss.forEach(boss => boss.moveInterval));
+    clearInterval(this.character.moveInterval)
+    clearInterval(this.character.playInterval)
+    clearInterval(this.gameInterval);
+    clearInterval(this.jumpInterval);
+    this.gameOver = true;
+    this.displayGameOverScreen();
+  }
+
+  /**
+   * Displays the game over screen.
+   */
+  displayGameOverScreen() {
+    const gameOverScreen = document.getElementById('game-over-screen');
+    gameOverScreen.style.display = 'flex';
+    gameOverScreen.classList.add(this.hasWonTheGame ? 'win': 'lose');
+    pauseEndbossAreaSound()
+    pauseBackgroundSound()
+    if(this.hasWonTheGame){
+      winSound();
+    } else {
+      lostSound()
+    }
   }
 
   /**
    * Checks for throwable objects and throws them if conditions are met.
    */
   checkThrowObjects() {
-    if (this.keyboard.D) {
+    if (this.keyboard.D && this.character.bottleAmount > 0 && this.allowNewBottleThrow) {
       let bottle = new ThrowableObject(
         this.character.x + 100,
         this.character.y + 100
       );
       bottle.throw(this.character.otherDirection);
       this.throwableObjects.push(bottle);
+      this.character.bottleAmount--;
+      this.bottleStatus.setPercentageBottles(this.character.bottleAmount);
+      this.allowNewBottleThrow = false; // Disable throwing
+      setTimeout(() => {
+        this.allowNewBottleThrow = true; // Enable throwing after 2 seconds
+      }, 2000);
     }
   }
 
@@ -71,7 +138,6 @@ class World {
    */
   checkThrowCollisions() {
     this.throwableObjects.forEach((ThrowableObject) => {
-      this.allowNewBottleThrow = false;
       if (this.bottleHitsGround(ThrowableObject)) this.bottleTouchGround(ThrowableObject, this.allowNewBottleThrow);
 
       this.level.enemies.forEach((enemy) => {
@@ -82,9 +148,7 @@ class World {
         if (this.bottleHitEndBoss(endBoss, ThrowableObject)) this.bottleHittingEndBoss(endBoss, ThrowableObject, this.allowNewBottleThrow);
       });
     });
-    
   }
-
 
   /**
    * Checks if the thrown bottle hits the ground.
@@ -126,7 +190,7 @@ class World {
     enemy.deadChickenAnimation();
     this.killChicken(enemy);
     this.removeDeadChicken(enemy);
-    allowNewBottleThrow = true;
+
   }
 
   /**
@@ -146,14 +210,18 @@ class World {
    * @param {boolean}  - Indicates if throwing a new bottle is allowed.
    */
   bottleHittingEndBoss(endBoss, ThrowableObject, allowNewBottleThrow) {
+    if (ThrowableObject.hasHit) return; // Prevent multiple hits
+    ThrowableObject.hasHit = true; // Mark the bottle as having hit
+
+    if(allowNewBottleThrow){
+      return
+    }
     ThrowableObject.splashingBottle();
     this.removeThrownBottle(ThrowableObject);
+    
     endBoss.endBossIsHit();
     ThrowableObject.speedY = 0;
     ThrowableObject.speedX = 0;
-    this.endBossIsHurt = true;
-    console.log("endBossIsHitted", this.bottleHitEndBoss(endBoss, ThrowableObject));
-    // setTimeout(() => (allowNewBottleThrow = true), 1000);
   }
 
   /**
@@ -164,7 +232,7 @@ class World {
     setTimeout(() => {
       let index = this.throwableObjects.indexOf(ThrowableObject);
       if (index !== -1) this.throwableObjects.splice(index, 1);
-    }, 250);
+    }, 150);
   }
 
   /**
@@ -239,24 +307,17 @@ class World {
    */
   checkCollisionsWithEnemy() {  // characterCollidedWithEnemy()
     this.character.hit();
+   if( this.character.energy <=0){
+         return this.endGame()
+   }
     this.healthStatus.setPercentage(this.character.energy);
   }
-
-  // checkCollisionsWithEnemy() {  // characterCollidedWithEnemy()
-  //   this.level.enemies.forEach((enemy) => {
-  //     if (this.character.isColliding(enemy) && this.character.isWalking()) {
-  //       this.character.hit();
-  //       this.healthStatus.setPercentage(this.character.energy);
-  //     }
-  //   });
-    
-  // }
 
   /**
    * Handles character collision with endBoss.
    */
   characterCollidingWithEndBoss(endBoss) {
-    return this.character.isColliding(endBoss) && !endBoss.endBossIsDead;
+    return this.character.isColliding(endBoss) && !endBoss.isDead;
   }
 
   /**
@@ -324,21 +385,15 @@ class World {
     }, 1000);
   }
 
-//=======================================
-
-  /**
-   * Checks if the character is dead.
-   * @returns {boolean} - True if character is dead, otherwise false.
-   */
-  isDead() {
-    return this.energy == 0;
-  }
-
-
   /**
    * Draws all elements on the canvas including movable and fixed objects.
    */
   draw() {
+    if(this.gameOver) {
+      this.displayGameOverScreen(); 
+    } else {
+
+    
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.ctx.translate(this.camera_x, 0);
     this.addMovableObjectsToMap();
@@ -353,6 +408,7 @@ class World {
       self.draw();
     });
   }
+  }
 
   /**
    * Adds to the map health, coin, and bottle status bars.
@@ -361,12 +417,11 @@ class World {
     this.addToMap(this.healthStatus);
     this.addToMap(this.bottleStatus);
     this.addToMap(this.coinStatus);
-    this.addToMap(this.endBossHealthStatus);
-
-    // if (this.endBossHealthStatus.visible) {
-    //   this.addToMap(this.endBossHealthStatus);
-    // }
-    
+    this.endBoss.forEach(boss => {
+      if(boss.visible){
+        this.addToMap(boss.endBossHealthStatus)
+      }
+    });
   }
 
   /**
@@ -401,7 +456,7 @@ class World {
     }
 
     mo.draw(this.ctx);
-    mo.drawFrame(this.ctx);
+    // mo.drawFrame(this.ctx);
 
     if (mo.otherDirection) {
       this.flipImageBack(mo);

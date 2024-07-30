@@ -21,6 +21,9 @@ class MovableObject extends DrawableObject {
     super();
   }
 
+  /**
+   * Applies gravity to the object.
+   */
   applyGravity() {
     setInterval(() => {
       if (this.isAboveGround() || this.speedY > 0) {
@@ -44,7 +47,7 @@ class MovableObject extends DrawableObject {
    * Plays an animation for the object.
    * @param {Array} images - Array of image paths for the animation.
    */
-  playAnimation(images) {
+  async playAnimation(images) {
     let i = this.currentImage % images.length;
     let path = images[i];
     this.img = this.imageCache[path];

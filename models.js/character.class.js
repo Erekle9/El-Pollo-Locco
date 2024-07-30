@@ -3,7 +3,8 @@ class Character extends MovableObject {
   width = 150;
   y = 60;
   speed = 10;
-
+  moveInterval;
+  playInterval;
   offset = {
     left: 20,
     top: 110,
@@ -61,14 +62,15 @@ class Character extends MovableObject {
     this.loadImages(this.IMAGES_HURT);
     this.applyGravity();
     this.animate();
+     
   }
 
   /**
    * Initiates animations for the character.
    */
   animate() {
-    setInterval(() => this.moveCharacter(), 1000 / 60);
-    setInterval(() => this.playCharacter(), 100);
+    this.moveInterval =setInterval(() => this.moveCharacter(), 1000 / 60);
+   this.playInterval = setInterval(() => this.playCharacter(), 100);
   }
 
   /**
@@ -139,6 +141,7 @@ class Character extends MovableObject {
       this.playAnimation(this.IMAGES_DEAD);
     } else if (this.isHurt()) {
       this.playAnimation(this.IMAGES_HURT);
+      characterIsHurtSound()
     } else if (this.isAboveGround()) {
       //jump animation
       this.playAnimation(this.IMAGES_JUMPING);

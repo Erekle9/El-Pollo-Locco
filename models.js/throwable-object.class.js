@@ -1,10 +1,9 @@
 class ThrowableObject extends MovableObject {
   speedX = 10;
+  hasHit = false;
   direction;
   splash = false;
   bottleRefill = false;
-  world;
-
   world;
 
   IMAGE_BOTTLE_ROTATION = [

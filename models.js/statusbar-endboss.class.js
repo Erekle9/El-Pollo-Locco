@@ -9,8 +9,15 @@ class StatusBarEndBoss extends DrawableObject {
         "img/7_statusbars/2_statusbar_endboss/blue/blue100.png"
     ];
 
+    /**
+   * Percentage of end boss life.
+   * @type {number}
+   */
     percentage = 100;
 
+     /**
+   * Constructs a new StatusBarEndboss object.
+   */
     constructor() {
         super();
         this.loadImages(this.IMAGES);
@@ -21,6 +28,10 @@ class StatusBarEndBoss extends DrawableObject {
         this.setPercentage(100);
     }
 
+    /**
+   * Sets the percentage of end boss life and updates the status bar image.
+   * @param {number} percentage - The percentage of end boss life.
+   */
     setPercentage(percentage) {
         this.percentage = percentage;
         let path = this.IMAGES[this.resolveImageIndex()];
@@ -28,6 +39,10 @@ class StatusBarEndBoss extends DrawableObject {
         this.visible = this.percentage < 100;
     }
 
+    /**
+   * Resolves the index of the image in IMAGES_LIFE_ENDBOSS array based on the percentage of end boss life.
+   * @returns {number} The index of the image.
+   */
     resolveImageIndex() {
         if (this.percentage == 100) {
             return 5;

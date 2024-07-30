@@ -8,14 +8,19 @@ class DrawableObject {
     width = 100;
 
 
-
+    /**
+   * Loads an image for the drawable object.
+   * @param {string} path - The path to the image.
+   */
     loadImage(path) {
         this.img = new Image();
         this.img.src = path;
     }
 
-    
-
+    /**
+   * Draws the drawable object on the canvas context.
+   * @param {CanvasRenderingContext2D} ctx - The canvas rendering context.
+   */
     draw(ctx) {
         try {
             ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
@@ -25,18 +30,10 @@ class DrawableObject {
         
     }
 
-    drawFrame(ctx) {
-        if (this instanceof Character || this instanceof Chicken || this instanceof CollectableBottle) {
-            ctx.beginPath();
-            ctx.lineWidth = '5';
-            ctx.strokeStyle = 'blue';
-            ctx.rect(this.x, this.y, this.width, this.height);
-            ctx.stroke();
-        }
-    }
-
-    
-
+    /**
+   * Loads multiple images for the drawable object.
+   * @param {string[]} arr - An array of paths to the images.
+   */
     loadImages(arr) {
         arr.forEach((path) => {
             let img = new Image();

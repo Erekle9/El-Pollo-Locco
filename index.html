@@ -29,23 +29,62 @@
     <script src="js/game.js"></script>
 </head>
 <body onload="init()">
-    <h1>El pollo Locco</h1>
+    <h1 id="game-title">El Pollo Loco</h1>
     <section id="game-container">
-        <div class="top-buttons">
-            <div class="top-left-button" id="top-left-button">
-                <button id="control-button"></button>
+        <div id="game-screen">
+            <div id="initial-screen">
+                <div onclick="start()">
+                    <img src="./img/buttons/play-button.svg" alt="Play button" class="play-button">
+                </div>
+                <div id="game-instructions">
+                    <div class="instruction-item-container">
+                        <div>
+                            <img src="./img/buttons/left.png" alt="Left arrow" class="instruction-button">
+                            <img src="./img/buttons/right.png" alt="Right arrow" class="instruction-button">
+                        </div>
+                        <span>Left / Right</span>
+                    </div>
+                    <div class="instruction-item-container">
+                        <img src="./img/buttons/space.png" alt="Space bar" class="instruction-button">
+                        <span>Jump</span>
+                    </div>
+                    <div class="instruction-item-container">
+                        <img src="./img/buttons/letter-d.png" alt="Letter D" class="instruction-button">
+                        <span>Attack</span>
+                    </div>
+                </div>
+                <div id="game-credits">
+                    <a href="impressum.html" target="_blank">
+                        <h2>Impressum</h2>
+                    </a>
+                    </div>
             </div>
-            <div class="top-right-buttons" id="top-right-buttons">
-                <button id="mute-button"></button>
-                <button id="fullscreen-button"></button>
+            <canvas id="canvas" width="720" height="480"></canvas>
+            <div id="game-over-screen">
+                <div class="restart-container" onclick="restartGame()">
+                    <img src="./img/buttons/restart-game.svg" alt="Restart button" class="restart-button">
+                    <div>Restart Game</div>
+                </div>
+            </div>
+            <div id="mobile-controls">
+               <div class="mobile-controls-left-container">
+                <button id="left-button" onmousedown="startPress('LEFT')" onmouseup="stopPress('LEFT')" ontouchstart="startPress('LEFT')" ontouchend="stopPress('LEFT')">
+                </button>
+                <button id="right-button" onmousedown="startPress('RIGHT')" onmouseup="stopPress('RIGHT')" ontouchstart="startPress('RIGHT')" ontouchend="stopPress('RIGHT')"></button>
+               </div>
+                <div class="mobile-buttons-right-container">
+                    <button id="jump-button" onmousedown="startPress('SPACE')" onmouseup="stopPress('SPACE')" ontouchstart="startPress('SPACE')" ontouchend="stopPress('SPACE')"></button>
+                <button id="attack-button" onmousedown="startPress('D')" onmouseup="stopPress('D')" ontouchstart="startPress('D')" ontouchend="stopPress('D')"></button>
+                </div>
+            </div>
+            <div id="user-controls">
+                <button id="mute-button" class="unmuted" onclick="muteAllSounds()"></button>
+                <button id="full-screen-button" onclick="toggleFullScreen()"></button>
             </div>
         </div>
-        <div class="top-start-button" id="top-start-button">
-            <button id="play-button"></button>
-        </div>
-        <canvas id="canvas" width="720" height="480">
-
-        </canvas>
     </section>
+    <div id="rotate-device-overlay">
+        <p>Turn around your phone to play</p>
+    </div>
 </body>
 </html>

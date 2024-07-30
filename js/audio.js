@@ -1,5 +1,8 @@
 let mute = false;
 
+/**
+ * Array containing audio data for various game sounds.
+ */
 let audioData = [
   new Audio("audio/chicken-is-dead.mp3"),
   new Audio("audio/small-chicken-is-dead.mp3"),
@@ -13,6 +16,9 @@ let audioData = [
   new Audio("audio/endBossAlert.mp3"),
   new Audio("audio/hurt-end-boss.mp3"),
   new Audio("audio/win.mp3"),
+  new Audio("audio/background.mp3"),
+  new Audio("audio/lost.mp3"),
+  new Audio("audio/win-1.mp3")
 ];
 
 function chickenIsDeadSound() {
@@ -56,7 +62,24 @@ function throwingBottleSound() {
 }
 
 function EndBosAreaSound() {
-  audioData[9].play();
+  audioData[9].play()
+  audioData[9].loop = true;
+}
+
+function pauseEndbossAreaSound() {
+  audioData[9].pause();
+}
+
+function playBackgroundSound() {
+  audioData[12].play();
+}
+
+function pauseBackgroundSound() {
+  audioData[12].pause();
+}
+
+function lostSound() {
+  audioData[13].play();
 }
 
 function endBossIsHurtSound() {
@@ -64,5 +87,26 @@ function endBossIsHurtSound() {
 }
 
 function winSound() {
-  audioData[11].play();
+  audioData[14].play();
+  audioData[14].addEventListener('ended', function() {
+    audioData[11].play();
+  });
+}
+
+/**
+ * Mutes all game sounds.
+ */
+function muteSounds() {
+  for (let i = 0; i < audioData.length; i++) {
+    audioData[i].muted = true;
+  }
+}
+
+/**
+ * Unmutes all game sounds.
+ */
+function unmuteSounds() {
+  for (let i = 0; i < audioData.length; i++) {
+    audioData[i].muted = false;
+  }
 }

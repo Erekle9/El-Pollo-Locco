@@ -1,10 +1,15 @@
 class EndBoss extends MovableObject {
+  moveInterval;
+  walkInterval;
+  endBossStateInterval;
+  visible = false; 
+  isDead = false;
+  endBossHealthStatus
   height = 400;
   width = 250;
   y = 55;
   world;
   energy = 100;
-  endBossIsDead = false;
   offset = {
     top: 0,
     left: 0,
@@ -64,47 +69,85 @@ class EndBoss extends MovableObject {
     this.loadImages(this.IMAGES_HURT);
     this.loadImages(this.IMAGES_DEAD);
     this.x = 4300;
-    this.animate();
+    this.endBossHealthStatus = new StatusBarEndBoss()
+    
   }
 
+  /**
+   * Initiates the animation of the end boss.
+   */
   animate() {
-    setInterval(() => this.playEndBoss(), 300);
-
-    // setInterval(() => {
-
-    //   if (this.alertArea) {
-    //     this.alertAnimation();
-    //   } else if (this.hadFirstContact()) {
-    //     this.moveAnimateEndBoss();
-    //     EndBosAreaSound();
-    //   }
-    //    if (world.character.x > 3900) {
-    //     clearInterval(this.alertAnimation())
-    //     this.moveAnimateEndBoss();
-    //     EndBosAreaSound();
-    //   }
-      
-    // }, 150);
+   this.endBossStateInterval = setInterval(() => {
+      this.checkEndBossState();
+    }, 150);
   }
 
+  /**
+   * Manage the end boss's state based on its energy level and alert area
+   */
+  checkEndBossState() {
+    if (this.energy <= 0) {
+      clearInterval(this.moveInterval);
+      clearInterval(this.walkInterval);
+      this.endBossDeadAnimation();
+      this.isDead = true;
+      
+    } else if (this.alertArea()) {
+      if (!this.visible) {
+        this.visible = true;
+        this.startEndBoss();
+      }
+      if (this.energy <= 50 && this.energy > 0) {
+        this.endBossAttackAnimation();
+        this.speed = 0.25;
+      }
+    }
+  }
+
+  /**
+   * Plays the alert animation of the end boss.
+   */
   alertAnimation() {
     this.playAnimation(this.IMAGES_ALERT);
   }
 
+  /**
+   * Checks if the character is in alert Area.
+   * @returns {boolean} True if character is in alert Area, otherwise false.
+   */
   alertArea() {
     return world.character.x > 3850;
   }
+ 
+  /**
+   * Moves the end boss to the left.
+   */
+  startEndBoss() {
+    if (!this.moveInterval) {
+      this.moveAnimateEndBoss();
+      pauseBackgroundSound()
+      EndBosAreaSound();
+    }
+  }
 
+  /**
+   * initiates walking animation.
+   */
   moveAnimateEndBoss() {
-    setInterval(() => this.moveLeft(), 1000 / 60);
-    setInterval(() => this.playAnimation(this.IMAGES_WALKING), 300);
+    this.moveInterval = setInterval(() => this.moveLeft(), 1000 / 60);
+    this.walkInterval = setInterval(() => this.playAnimation(this.IMAGES_WALKING), 300);
   }
 
-  endBossHartAnimation() {
+  /**
+   * initiates Hurt animation.
+   */
+  endBossHurtAnimation() {
     this.playAnimation(this.IMAGES_HURT);
-   setInterval(() => this.playAnimation(this.IMAGES_HURT),300);
   }
 
+  /**
+   * initiates Attack animation.
+   */
   endBossAttackAnimation() {
     this.playAnimation(this.IMAGES_ATTACK);
   }
@@ -112,43 +155,23 @@ class EndBoss extends MovableObject {
   /**
    * Handles the event when the end boss is hit.
    */
-  endBossIsHit() {
-    this.energy -= 8;
-    // this.endBossIsHurt = true;
-    setTimeout(() => (this.endBossIsHurt = false), 50);
-    if (this.energy <= 0) {
-      this.energy = 0;
-    } else {
-      this.lastHit = new Date().getTime();
-      this.endBossHartAnimation();
+ endBossIsHit() {
+    this.energy -= 20; // Example damage value
+    this.endBossHealthStatus.setPercentage(this.energy)
+    if (this.energy < 0) {
+        this.energy = 0; // Prevent negative health
     }
-    // this.setStatusBarEndBoss();
-    console.log( "bosis healt is:", this.energy);
-  }
+    if (this.energy <= 0) {
+        
+    } else {
+        this.endBossHurtAnimation();
+    }
+}
 
-  endBossDeadAnimation() {
+  async endBossDeadAnimation() {
     this.playAnimation(this.IMAGES_DEAD);
   }
 
-  playEndBoss() {
-    if (this.isDead) {
-      if (this.isDead()) {
-        this.playAnimation(this.IMAGES_DEAD);
-        console.log('is dead');
-        return;
-      } else if (this.endBossIsHurt = true) {
-        this.playAnimation(this.IMAGES_HURT);
-        this.moveLeft();
-      } else if (this.alertArea) {
-        this.alertAnimation();
-      } else {
-        if (this.energy <= 50) {
-          this.playAnimation(this.IMAGES_ATTACK);
-          this.speed = 0.25;
-        }
-      }
-    }
-    }
   
 
 }

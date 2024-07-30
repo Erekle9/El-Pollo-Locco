@@ -90,8 +90,8 @@ function createBackgroundObjects() {
 }
 
 /**
-   * Creates collectable objects for the level.
-   * @returns {Array} An array of collectable object instances.
+   * Creates collectable Bottles for the level.
+   * @returns {Array} An array of collectable Bottles instances.
    */
 function createBottles() {
   return [
@@ -100,10 +100,15 @@ function createBottles() {
     new CollectableBottle(),
     new CollectableBottle(),
     new CollectableBottle(),
-    
+    new CollectableBottle(),
+    new CollectableBottle(),
   ];
 }
 
+/**
+   * Creates collectable Coins for the level.
+   * @returns {Array} An array of collectable Coins instances.
+   */
 function createCoins() {
   return [
     new Coin(),

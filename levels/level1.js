@@ -102,6 +102,11 @@ function createBottles() {
     new CollectableBottle(),
     new CollectableBottle(),
     new CollectableBottle(),
+    new CollectableBottle(),
+    new CollectableBottle(),
+    new CollectableBottle(),
+    new CollectableBottle(),
+    new CollectableBottle(),
   ];
 }
 

@@ -37,15 +37,15 @@ class StatusBarBottle extends DrawableObject {
    * * @returns {number} The index of the image.
    */
     resolveImageIndex() {
-      if (this.percentageBottle >= 5) {
+      if (this.percentageBottle >= 11) {
         return 5;
-      } else if(this.percentageBottle >= 4) {
+      } else if(this.percentageBottle >= 8) {
         return 4;
-      } else if(this.percentageBottle >= 3) {
+      } else if(this.percentageBottle >= 6) {
         return 3;
-      } else if(this.percentageBottle >= 2) {
+      } else if(this.percentageBottle >= 4) {
         return 2;
-      } else if(this.percentageBottle >= 1) {
+      } else if(this.percentageBottle >= 2) {
         return 1;
       } else {
         return 0;

@@ -10,11 +10,12 @@ class EndBoss extends MovableObject {
   y = 55;
   world;
   energy = 100;
+  speed = 2.5;
   offset = {
     top: 0,
-    left: 0,
+    left: 35,
     bottom: 0,
-    right: 0,
+    right: 20,
   };
 
   IMAGES_WALKING = [
@@ -99,7 +100,7 @@ class EndBoss extends MovableObject {
       }
       if (this.energy <= 50 && this.energy > 0) {
         this.endBossAttackAnimation();
-        this.speed = 0.25;
+        this.speed = 3.2;
       }
     }
   }
@@ -116,7 +117,7 @@ class EndBoss extends MovableObject {
    * @returns {boolean} True if character is in alert Area, otherwise false.
    */
   alertArea() {
-    return world.character.x > 3850;
+    return world.character.x > 3750;
   }
  
   /**
@@ -130,11 +131,15 @@ class EndBoss extends MovableObject {
     }
   }
 
+  endBossMoveLeft() {
+    this.x -= this.speed;
+  }
+
   /**
    * initiates walking animation.
    */
   moveAnimateEndBoss() {
-    this.moveInterval = setInterval(() => this.moveLeft(), 1000 / 60);
+    this.moveInterval = setInterval(() => this.endBossMoveLeft(), 1000 / 30);
     this.walkInterval = setInterval(() => this.playAnimation(this.IMAGES_WALKING), 300);
   }
 
@@ -156,7 +161,7 @@ class EndBoss extends MovableObject {
    * Handles the event when the end boss is hit.
    */
  endBossIsHit() {
-    this.energy -= 20; // Example damage value
+    this.energy -= 14; // Example damage value
     this.endBossHealthStatus.setPercentage(this.energy)
     if (this.energy < 0) {
         this.energy = 0; // Prevent negative health

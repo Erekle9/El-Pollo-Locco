@@ -69,7 +69,7 @@ class Character extends MovableObject {
    * Initiates animations for the character.
    */
   animate() {
-    this.moveInterval =setInterval(() => this.moveCharacter(), 1000 / 60);
+    this.moveInterval =setInterval(() => this.moveCharacter(), 1000 / 30);
    this.playInterval = setInterval(() => this.playCharacter(), 100);
   }
 

@@ -45,7 +45,7 @@ class ThrowableObject extends MovableObject {
   rotationAnimate() {
     setInterval(() => {
       this.throwingBottle();
-    }, 70);
+    }, 50);
   }
 
    /**

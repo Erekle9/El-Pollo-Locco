@@ -10,6 +10,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     min-height: 100vh;
     margin: 0;
     background-image: url('img/5_background/background_game.png');
@@ -19,11 +20,10 @@ body {
 }
 
 canvas {
-    border-radius: 8px;
+    border-radius: 12px;
     background-image: url(img/9_intro_outro_screens/start/startscreen_1.png);
     background-size: cover;
     background-repeat: no-repeat;
-
 }
 
 #game-title {
@@ -288,9 +288,9 @@ button:hover {
 }
 
 #game-credits a {
-    text-decoration: none; /* Remove underline */
-    color: #FFD60C; /* Inherit color from parent */
-    outline: none; /* Remove default outline */
+    text-decoration: none; 
+    color: #FFD60C; 
+    outline: none; 
 }
 
 #game-credits a h2 {
@@ -300,7 +300,18 @@ button:hover {
 }
 
 #game-credits a h2:hover {
-    color: white; /* Change text color on hover */
-    background-color: #FFB300; /* Change background color on hover */
-    border-radius: 5px; /* Optional: Add border-radius for rounded corners */
+    color: white; 
+    background-color: #FFB300; 
+    border-radius: 5px; 
+}
+
+@media (max-width: 850px) {
+    #mobile-controls {
+        display: flex; /* Show on small devices */
+    }
+
+    .mobile-controls-left-container,
+    .mobile-buttons-right-container {
+        width: 100px;
+    }
 }

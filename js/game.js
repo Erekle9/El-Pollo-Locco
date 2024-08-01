@@ -32,17 +32,22 @@ function shoHideElementsOnGameScreen() {
  * Shows a rotate device overlay if the device is in portrait mode.
  */
 function checkOrientation() {
-  if (window.innerHeight > window.innerWidth) {
-      document.getElementById('rotate-device-overlay').style.display = 'flex';
-      document.getElementById('game-screen').style.display = 'none';
+  const overlay = document.getElementById('rotate-device-overlay');
+  const gameScreen = document.getElementById('game-screen');
+
+  if (window.innerHeight > window.innerWidth && window.innerWidth < 500) {
+    overlay.style.display = 'flex';
+    gameScreen.style.display = 'none';
   } else {
-      document.getElementById('rotate-device-overlay').style.display = 'none';
-      document.getElementById('game-screen').style.display = 'flex';
+    overlay.style.display = 'none';
+    gameScreen.style.display = 'flex';
   }
-  if(navigator.userAgent){
-      shoHideElementsOnGameScreen()
+
+  if (navigator.userAgent) {
+    shoHideElementsOnGameScreen();
   }
 }
+
 
 
 /**

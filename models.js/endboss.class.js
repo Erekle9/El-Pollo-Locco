@@ -9,7 +9,7 @@ class EndBoss extends MovableObject {
   width = 250;
   y = 55;
   world;
-  energy = 100;
+  endBossEnergy = 100;
   speed = 2.5;
   offset = {
     top: 0,
@@ -38,13 +38,14 @@ class EndBoss extends MovableObject {
 
   IMAGES_ATTACK = [
     "img/4_enemie_boss_chicken/3_attack/G13.png",
-    "img/4_enemie_boss_chicken/3_attack/G13.png",
-    "img/4_enemie_boss_chicken/3_attack/G13.png",
-    "img/4_enemie_boss_chicken/3_attack/G13.png",
-    "img/4_enemie_boss_chicken/3_attack/G13.png",
-    "img/4_enemie_boss_chicken/3_attack/G13.png",
-    "img/4_enemie_boss_chicken/3_attack/G13.png",
-    "img/4_enemie_boss_chicken/3_attack/G13.png",
+    "img/4_enemie_boss_chicken/3_attack/G14.png",
+    "img/4_enemie_boss_chicken/3_attack/G15.png",
+    "img/4_enemie_boss_chicken/3_attack/G16.png",
+    "img/4_enemie_boss_chicken/3_attack/G17.png",
+    "img/4_enemie_boss_chicken/3_attack/G18.png",
+    "img/4_enemie_boss_chicken/3_attack/G19.png",
+    "img/4_enemie_boss_chicken/3_attack/G20.png",
+    
   ];
 
   IMAGES_HURT = [
@@ -87,21 +88,29 @@ class EndBoss extends MovableObject {
    * Manage the end boss's state based on its energy level and alert area
    */
   checkEndBossState() {
-    if (this.energy <= 0) {
+    if (this.endBossEnergy <= 0) {
       clearInterval(this.moveInterval);
       clearInterval(this.walkInterval);
       this.endBossDeadAnimation();
       this.isDead = true;
-      
     } else if (this.alertArea()) {
       if (!this.visible) {
         this.visible = true;
         this.startEndBoss();
       }
-      if (this.energy <= 50 && this.energy > 0) {
-        this.endBossAttackAnimation();
-        this.speed = 3.2;
-      }
+    } 
+    this.enBossAttack ();
+  }
+
+ /**
+ * Initiates the EndBoss attack sequence if its energy is between 1 and 50.
+ * - Executes the EndBoss's attack animation.
+ * - Sets the EndBoss's speed to 3.2.
+ */
+  enBossAttack () {
+    if (this.endBossEnergy <= 50 && this.endBossEnergy > 0) {
+      this.endBossAttackAnimation();
+      this.speed = 3.2;
     }
   }
 
@@ -130,7 +139,9 @@ class EndBoss extends MovableObject {
       EndBosAreaSound();
     }
   }
-
+  /**
+   * Moves the object to the left.
+   */
   endBossMoveLeft() {
     this.x -= this.speed;
   }
@@ -155,19 +166,17 @@ class EndBoss extends MovableObject {
    */
   endBossAttackAnimation() {
     this.playAnimation(this.IMAGES_ATTACK);
+    console.log("EndBoss attack animation started");
   }
 
   /**
    * Handles the event when the end boss is hit.
    */
  endBossIsHit() {
-    this.energy -= 14; // Example damage value
-    this.endBossHealthStatus.setPercentage(this.energy)
+    this.endBossEnergy -= 14; // Example damage value
+    this.endBossHealthStatus.setPercentage(this.endBossEnergy)
     if (this.energy < 0) {
         this.energy = 0; // Prevent negative health
-    }
-    if (this.energy <= 0) {
-        
     } else {
         this.endBossHurtAnimation();
     }
@@ -175,6 +184,7 @@ class EndBoss extends MovableObject {
 
   async endBossDeadAnimation() {
     this.playAnimation(this.IMAGES_DEAD);
+    pauseWalkingSound();
   }
 
   

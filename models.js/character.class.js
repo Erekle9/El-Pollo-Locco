@@ -3,6 +3,7 @@ class Character extends MovableObject {
   width = 150;
   y = 60;
   speed = 10;
+  lastMovement = new Date().getTime();
   moveInterval;
   playInterval;
   offset = {
@@ -49,6 +50,32 @@ class Character extends MovableObject {
     "img/2_character_pepe/4_hurt/H-43.png",
   ];
 
+  IMAGES_IDLE = [
+    'img/2_character_pepe/1_idle/idle/I-1.png',
+    'img/2_character_pepe/1_idle/idle/I-2.png',
+    'img/2_character_pepe/1_idle/idle/I-3.png',
+    'img/2_character_pepe/1_idle/idle/I-4.png',
+    'img/2_character_pepe/1_idle/idle/I-5.png',
+    'img/2_character_pepe/1_idle/idle/I-6.png',
+    'img/2_character_pepe/1_idle/idle/I-7.png',
+    'img/2_character_pepe/1_idle/idle/I-8.png',
+    'img/2_character_pepe/1_idle/idle/I-9.png',
+    'img/2_character_pepe/1_idle/idle/I-10.png'
+  ];
+
+  IMAGES_IDLE_LONG = [
+    'img/2_character_pepe/1_idle/long_idle/I-11.png',
+    'img/2_character_pepe/1_idle/long_idle/I-12.png',
+    'img/2_character_pepe/1_idle/long_idle/I-13.png',
+    'img/2_character_pepe/1_idle/long_idle/I-14.png',
+    'img/2_character_pepe/1_idle/long_idle/I-15.png',
+    'img/2_character_pepe/1_idle/long_idle/I-16.png',
+    'img/2_character_pepe/1_idle/long_idle/I-17.png',
+    'img/2_character_pepe/1_idle/long_idle/I-18.png',
+    'img/2_character_pepe/1_idle/long_idle/I-19.png',
+    'img/2_character_pepe/1_idle/long_idle/I-20.png'
+  ];
+
   world;
 
   /**
@@ -60,17 +87,18 @@ class Character extends MovableObject {
     this.loadImages(this.IMAGES_JUMPING);
     this.loadImages(this.IMAGES_DEAD);
     this.loadImages(this.IMAGES_HURT);
+    this.loadImages(this.IMAGES_IDLE);
+    this.loadImages(this.IMAGES_IDLE_LONG);
     this.applyGravity();
     this.animate();
-     
   }
 
   /**
    * Initiates animations for the character.
    */
   animate() {
-    this.moveInterval =setInterval(() => this.moveCharacter(), 1000 / 30);
-   this.playInterval = setInterval(() => this.playCharacter(), 100);
+    this.moveInterval = setInterval(() => this.moveCharacter(), 1000 / 30);
+    this.playInterval = setInterval(() => this.playCharacter(), 100);
   }
 
   /**
@@ -80,13 +108,16 @@ class Character extends MovableObject {
     pauseWalkingSound();
     if (this.canMoveRight()) {
       this.moveRight();
+      this.lastMovement = new Date().getTime();
     }
     if (this.canMoveLeft()) {
       this.moveLeft();
+      this.lastMovement = new Date().getTime();
     }
     if (this.canJump()) {
       this.jump();
       jumpSound();
+      this.lastMovement = new Date().getTime();
     }
     this.world.camera_x = -this.x + 100;
   }
@@ -137,18 +168,23 @@ class Character extends MovableObject {
    * Method to play character animations based on different conditions.
    */
   playCharacter() {
+    const currentTime = new Date().getTime();
+    const timeSinceLastMovement = (currentTime - this.lastMovement) / 1000;
+
     if (this.isDead()) {
       this.playAnimation(this.IMAGES_DEAD);
     } else if (this.isHurt()) {
       this.playAnimation(this.IMAGES_HURT);
-      characterIsHurtSound()
+      characterIsHurtSound();
     } else if (this.isAboveGround()) {
-      //jump animation
       this.playAnimation(this.IMAGES_JUMPING);
     } else {
       if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
-        // walk animation
         this.playAnimation(this.IMAGES_WALKING);
+      } else if (timeSinceLastMovement >= 6) {
+        this.playAnimation(this.IMAGES_IDLE_LONG);
+      } else {
+        this.playAnimation(this.IMAGES_IDLE);
       }
     }
   }
